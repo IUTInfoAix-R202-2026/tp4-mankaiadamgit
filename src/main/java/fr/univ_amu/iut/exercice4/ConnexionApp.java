@@ -1,8 +1,11 @@
 package fr.univ_amu.iut.exercice4;
 
+import com.google.inject.Guice;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
@@ -20,6 +23,12 @@ public class ConnexionApp extends Application {
   public void start(Stage stage) throws Exception {
     stage.setTitle("Exercice 4 - Connexion avec Guice");
 
+    Injector injector = Guice.createInjector(new AppModule());
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("ConnexionView.fxml"));
+    loader.setControllerFactory(injector::getInstance);
+    Parent racine = loader.load();
+    stage.setScene(new Scene(racine));
+    stage.show();
     // TODO exercice 4 : créer l'injecteur Guice à partir du module, puis
     // brancher FXMLLoader dessus, charger la vue et l'afficher.
     //
