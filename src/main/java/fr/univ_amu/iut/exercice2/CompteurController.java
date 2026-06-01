@@ -22,21 +22,31 @@ public class CompteurController {
 
   @FXML
   private void initialize() {
+    labelCompteur.setText("Compteur à 0");
+    viewModel
+        .messageProperty()
+        .addListener(
+            (obs, oldval, newval) -> {
+              labelCompteur.setText(newval);
+            });
     // TODO exercice 2 : lier le texte du label au message du ViewModel.
   }
 
   @FXML
   private void surIncrementer() {
+    this.viewModel.incrementerCommand();
     // TODO exercice 2 : appeler la commande du ViewModel.
   }
 
   @FXML
   private void surDecrementer() {
+    this.viewModel.decrementerCommand();
     // TODO exercice 2 : appeler la commande du ViewModel.
   }
 
   @FXML
   private void surReinitialiser() {
+    this.viewModel.reinitialiserCommand();
     // TODO exercice 2 : appeler la commande du ViewModel.
   }
 }

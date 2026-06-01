@@ -28,9 +28,6 @@ public class MessageController {
 
   @FXML
   private void initialize() {
-
-    champTexte.textProperty().bindBidirectional(viewModel.texteProperty());
-    labelApercu.textProperty().bind(viewModel.apercuProperty());
     // TODO exercice 1 : brancher la vue sur le ViewModel.
     //
     // - Liaison BIDIRECTIONNELLE entre le champ de saisie et texteProperty()
