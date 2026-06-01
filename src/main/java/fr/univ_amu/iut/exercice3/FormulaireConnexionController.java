@@ -28,6 +28,11 @@ public class FormulaireConnexionController {
 
   @FXML
   private void initialize() {
+
+    champIdentifiant.textProperty().bindBidirectional(viewModel.identifiantProperty());
+    champMotDePasse.textProperty().bindBidirectional(viewModel.motDePasseProperty());
+    labelStatut.textProperty().bind(viewModel.statutProperty());
+    boutonValider.disableProperty().bind(viewModel.validableProperty().not());
     // TODO exercice 3 : brancher la vue sur le ViewModel.
     //
     // - champIdentifiant <-> identifiantProperty (bidirectionnel)
@@ -39,6 +44,7 @@ public class FormulaireConnexionController {
 
   @FXML
   private void surValider() {
+    this.viewModel.connecterCommand();
     // TODO exercice 3 : déclencher la commande de connexion.
   }
 }
