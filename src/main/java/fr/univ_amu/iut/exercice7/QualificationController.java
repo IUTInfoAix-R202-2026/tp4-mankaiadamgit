@@ -4,6 +4,9 @@ import com.google.inject.Inject;
 import fr.nedjar.vigiechiro.audio.AudioView;
 import java.nio.file.Path;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -52,19 +55,39 @@ public class QualificationController {
               }
             });
 
-    // TODO exercice 7 : câbler entièrement la vue sur le ViewModel.
-    //
-    // 1. Colonnes (cell value factory) : horodatage (HH:mm), fréquence (%.1f kHz),
-    //    durée (en s), statut.
-    // 2. tableSequences.setItems(viewModel.sequencesProperty());
-    // 3. Relayer la sélection : viewModel.sequenceSelectionneeProperty()
-    //       .bind(tableSequences.getSelectionModel().selectedItemProperty());
-    // 4. labelSelection <- descriptionSelectionProperty (sens unique).
-    // 5. boutonEcouter désactivé quand rien n'est sélectionné :
-    //       boutonEcouter.disableProperty().bind(viewModel.peutEcouterProperty().not());
-    // 6. zoneCommentaire <-> commentaireProperty (bidirectionnel).
-    // 7. choiceVerdict : items = viewModel.listeVerdicts(), valeur <-> verdictSaisiProperty.
-    // 8. labelVerdictGlobal <- verdictGlobalLibelleProperty.
+    colHorodatage.setCellValueFactory(
+        cell ->
+            Bindings.createStringBinding(
+                () -> cell.getValue().getHorodatage().format(HEURE),
+                cell.getValue().horodatageProperty()));
+
+    colFrequence.setCellValueFactory(
+        cell ->
+            Bindings.createStringBinding(
+                () ->
+                    String.format(
+                        Locale.ROOT, "%.1f kHz", cell.getValue().getFrequenceDominanteKHz()),
+                cell.getValue().frequenceDominanteKHzProperty()));
+
+    colDuree.setCellValueFactory(
+        cell ->
+            Bindings.createStringBinding(
+                () -> cell.getValue().getDureeSecondes() + " s",
+                cell.getValue().dureeSecondesProperty()));
+
+    colStatut.setCellValueFactory(cell -> cell.getValue().statutProperty());
+
+    tableSequences.setItems(viewModel.sequencesProperty());
+    viewModel
+        .sequenceSelectionneeProperty()
+        .bind(tableSequences.getSelectionModel().selectedItemProperty());
+    labelSelection.textProperty().bind(viewModel.descriptionSelectionProperty());
+    boutonEcouter.disableProperty().bind(viewModel.peutEcouterProperty().not());
+    zoneCommentaire.textProperty().bindBidirectional(viewModel.commentaireProperty());
+
+    choiceVerdict.setItems(FXCollections.observableArrayList(viewModel.listeVerdicts()));
+    choiceVerdict.valueProperty().bindBidirectional(viewModel.verdictSaisiProperty());
+    labelVerdictGlobal.textProperty().bind(viewModel.verdictGlobalLibelleProperty());
   }
 
   @FXML
